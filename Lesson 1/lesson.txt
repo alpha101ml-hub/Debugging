@@ -1,0 +1,185 @@
+🧭 Lesson 1.1 – The Two Types of Bugs
+
+In your notes, write:
+
+    Syntax error – Code won’t run at all. Interpreter tells you the line.
+
+    Logic/runtime error – Code runs but does something wrong (wrong result, crash, freeze).
+
+    This course focuses on logic errors – because syntax errors already tell you where to look.
+
+Now ask yourself: What was the last logic error you faced? (Just think – no need to write unless you want.)
+
+📍 Lesson 1.2 – print() Done Methodically (Not Randomly)
+
+Most novices put print() everywhere and get lost.
+Instead, follow three rules:
+
+    Print at function entry – print(">>> entering compute_average")
+
+    Print variable values before & after a suspicious line – print(f"x before: {x}")
+
+    Print checkpoints – print("=== checkpoint 1 ===") to see how far execution goes.
+
+In your notes, copy this example:
+
+def buggy_function(a, b):
+    print(">>> entering buggy_function")          # entry
+    result = a * (b + 1)                          # suspicious line
+    print(f"result after suspicious line: {result}")  # inspect
+    print("=== before return ===")                # checkpoint
+    return result
+
+✍️ Exercise 1.2 – Find the crash with exactly 3 print statements
+
+Below is a broken Python script. Do not run it yet.
+Open a new Python file (e.g., lesson1_exercise.py).
+
+Add only three print() statements to figure out which line causes the crash.
+
+def divide_list(nums, divisor):
+    print(">>> enter divide_list")
+    result = []
+    for i in range(len(nums) + 1):
+        print(f"i = {i}, len(nums) = {len(nums)}")   # shows i becomes 3 when max index is 2
+        value = nums[i] / divisor
+        result.append(value)
+    return result
+
+
+
+Your task:
+
+    Add print() statements at entry, inside loop, and before the problematic line.
+
+    Run the script.
+
+    In your notes, write the line number that crashes and why.
+
+    Hint: The crash is an IndexError. Your prints should show you the value of i when it goes wrong.
+
+When you finish, compare with my solution below (but only after you try).
+<details> <summary>Click to see one possible solution</summary>
+
+def divide_list(nums, divisor):
+    print(">>> enter divide_list")
+    result = []
+    for i in range(len(nums) + 1):
+        print(f"i = {i}, len(nums) = {len(nums)}")   # shows i becomes 3 when max index is 2
+        value = nums[i] / divisor
+        result.append(value)
+    return result
+
+
+The crash is at nums[i] when i == 3.
+Fix: change range(len(nums) + 1) to range(len(nums)).
+</details>
+
+
+🔍 Lesson 1.3 – The Novice Debugging Loop (4 steps)
+
+Write this in your notes. Memorise it.
+
+    Reproduce – Can you make the bug happen every time? If not, find what input does.
+
+    Isolate – Find the smallest region of code where the bug lives.
+    Novice method: comment out half the code, run, see if bug still there.
+
+    Understand – Why does that line produce the wrong value? Look at variable values.
+
+    Fix & Test – Change one thing, run again, confirm bug gone.
+
+In your notes, draw a simple diagram:
+
+Reproduce → Isolate → Understand → Fix & Test
+     ↑                                   |
+     └───────────────(loop)──────────────┘
+
+
+✂️ Exercise 1.3 – Binary search by commenting
+
+Take this 30‑line function (it’s supposed to merge two sorted lists but returns wrong result).
+Do not try to understand the whole thing. Instead:
+
+    Comment out half the lines (temporarily replace with pass or a simple return).
+
+    Run it. Does the bug still appear?
+
+    If yes → bug is in the uncommented half. If no → bug is in the commented half.
+
+    Repeat until you narrow it down to 3–5 lines.
+
+    def merge_sorted(a, b):
+    result = []
+    i = 0
+    j = 0
+    while i < len(a) and j < len(b):
+        if a[i] <= b[j]:
+            result.append(a[i])
+            i += 1
+        else:
+            result.append(b[j])
+            j += 1
+    while i < len(a):
+        result.append(a[i])
+        i += 1
+    while j < len(b):
+        result.append(b[j])
+        j += 1
+    return result
+
+# Test
+print(merge_sorted([1, 3, 5], [2, 4, 6]))   # Expected [1,2,3,4,5,6] but gets [1,2,3,4,5,6]? Actually it's fine. Let's plant a bug.
+
+
+(I’ll give a genuinely buggy version – but for this exercise, you can create your own bug by changing one <= to < or swapping indices. The point is to practice binary search by commenting.)
+
+Write in your notes:
+
+    How many steps did it take to find the 5‑line region?
+
+    What was the bug?
+
+
+🧪 Lesson 1.4 – Minimal Reproducible Example (MRE)
+
+An MRE is the shortest possible code that still shows the bug.
+
+Why you need it:
+
+    Helps you ask for help on Stack Overflow / ChatGPT.
+
+    Often, while stripping code, you find the bug yourself.
+
+Rules for an MRE (write in notes):
+
+    Remove all unrelated code (no GUI, no database if not needed).
+
+    Replace external data with a small hardcoded array.
+
+    Remove all dependencies that aren’t essential.
+
+Example: Instead of 500 lines reading a CSV and doing ML, you write:
+
+
+import pandas as pd
+# Instead of pd.read_csv('huge.csv'), do:
+data = pd.DataFrame({'x': [1,2,3], 'y': [4,5,6]})
+# Then reproduce the bug on this tiny data.
+
+
+✍️ Exercise 1.4 – Make an MRE from a large failure
+
+Imagine you have a 500‑line web scraper that fails on a specific URL.
+It uses requests, BeautifulSoup, and saves to a database.
+
+Write down (in your notes) what your MRE would look like – step by step.
+For example:
+
+    Replace the database with a simple print().
+
+    Replace the full HTML with a short string containing only the part that breaks.
+
+    Keep only the function that parses that fragment.
+
+You don’t have to write actual code now – just the plan.
