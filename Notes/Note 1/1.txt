@@ -1,0 +1,11 @@
+Debugging
+
+- Lecture 1 - We'll start with basics : breakpoints.
+ - Lecture 2 - Then move to the watch panel, to track variables in real time
+- Then comes your first challenge, so you canb apply what you've learned.
+- Lecture 3 - We'll understand the call stack, to see how your function are flowing.
+- Lecture 4 - Learn how to set conditional breakpoints, so your code only pauses when you want it to.
+- Lecture 5 - Use logpoints to print without print(). Yes, really.
+- Lecture 8 - And finally, handle raised exceptions the right way.
+
+breakpoints helps in to pause the execution, freeze the code or inspect the variables
